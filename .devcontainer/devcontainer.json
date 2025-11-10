@@ -1,0 +1,121 @@
+{
+  // -----------------------------------------------------
+  // 1. コンテナの基本設定 (修正箇所)
+  // -----------------------------------------------------
+  "name": "LaTeX Codespace (with Japanese Support)",
+  
+  // "image": "mcr.microsoft.com/devcontainers/universal:latest",  <-- 削除
+  "build": { // <-- 追加
+    "dockerfile": "Dockerfile"
+  },
+  
+  // "features": { // <-- 削除またはコメントアウト
+  //   "ghcr.io/prulloac/devcontainer-features/latex:1": {} 
+  // },
+  // -----------------------------------------------------
+
+  
+  // -----------------------------------------------------
+  // 2. 自動インストールする拡張機能 (必須)
+  // -----------------------------------------------------
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "James-Yu.latex-workshop", // LaTeX Workshop
+        "vscode.emmet"             // その他よく使う拡張機能
+      ]
+    }
+  },
+
+  // -----------------------------------------------------
+  // 3. 提示された VS Code 設定 (settings.jsonの内容)
+  // -----------------------------------------------------
+  "settings": {
+    // 日本語文書で単語移動を使うため、助詞や読点、括弧を区切り文字として指定する
+    "editor.wordSeparators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?　、。「」【】『』（）！？てにをはがのともへでや",
+
+    // LaTeX Workshopの設定
+    "latex-workshop.latex.tools": [
+      // ... 提示された Tool 定義（Latexmk (LuaLaTeX) など4つ）をここに記述 ...
+      {
+          "name": "Latexmk (LuaLaTeX)",
+          "command": "latexmk",
+          "args": [
+              "-f", "-gg", "-lualatex", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"
+          ]
+      },
+      // ... 他の3つの Tool 定義もここに続きます ...
+      {
+          "name": "Latexmk (XeLaTeX)",
+          "command": "latexmk",
+          "args": [
+              "-f", "-gg", "-xelatex", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"
+          ]
+      },
+      {
+          "name": "Latexmk (upLaTeX)",
+          "command": "latexmk",
+          "args": [
+              "-f", "-gg", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"
+          ]
+      },
+      {
+          "name": "Latexmk (pLaTeX)",
+          "command": "latexmk",
+          "args": [
+              "-f", "-gg", "-latex='platex'", "-latexoption='-kanji=utf8 -no-guess-input-env'", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"
+          ]
+      }
+    ],
+
+    "latex-workshop.latex.recipes": [
+      // ... 提示された Recipe 定義（LuaLaTeX、XeLaTeX、upLaTeX、pLaTeX）をここに記述 ...
+      {
+          "name": "LuaLaTeX",
+          "tools": ["Latexmk (LuaLaTeX)"]
+      },
+      {
+          "name": "XeLaTeX",
+          "tools": ["Latexmk (XeLaTeX)"]
+      },
+      {
+          "name": "upLaTeX",
+          "tools": ["Latexmk (upLaTeX)"]
+      },
+      {
+          "name": "pLaTeX",
+          "tools": ["Latexmk (pLaTeX)"]
+      }
+    ],
+
+    "latex-workshop.latex.magic.args": [
+      "-f", "-gg", "-pv", "-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"
+    ],
+    "latex-workshop.latex.clean.fileTypes": [
+      "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind", "*.lof", "*.lot", "*.out", "*.toc", "*.acn", "*.acr", "*.alg", "*.glg", "*.glo", "*.gz", "*.gls", "*.ist", "*.fls", "*.log", "*.fdb_latexmk", "*.synctex.gz", "_minted*", "*.nav", "*.snm", "*.synctex.gz", "*.vrb"
+    ],
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.latex.autoBuild.run": "onSave", // onSaveはビルドが重い場合に注意
+    "latex-workshop.intellisense.package.enabled": true,
+    // "latex-workshop.latex.outDir": "out", // outディレクトリに吐き出す場合はこの設定を有効に
+    "workbench.editor.enablePreview": false,
+    "window.zoomLevel": -0.5,
+    "remote.SSH.remotePlatform": {
+      "AzureLinux": "linux"
+    },
+
+    // 言語固有の設定
+    "[tex]": {
+      "editor.suggest.snippetsPreventQuickSuggestions": false,
+      "editor.tabSize": 2
+    },
+    "[latex]": {
+      "editor.suggest.snippetsPreventQuickSuggestions": false,
+      "editor.tabSize": 2
+    },
+    "[bibtex]": {
+      "editor.tabSize": 2
+    }
+  }
+}
